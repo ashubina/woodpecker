@@ -1,0 +1,19 @@
+The signature database is in signatures.txt. 
+
+Syntax: The syntax is one XML element per signature. To parse as
+well-formed XML, this file would just need a document root element
+(SigFile.pm actually adds it).
+
+Meaning: The signature format is a bare-bones result of k-Means
+clustering.  See generate-signature.pl for how a signature is
+generated and the expected format of an input file. See SigFile.pm for
+the format of the signatures DB file.
+
+Each signature record contains a descriptive name, then a list of
+clusters and their respective sizes. Both cluster coordinates and
+cluster sizes must be treated as relative by any classifier and
+distribution distance, because their absolute values ultimately come
+for the traffic captures used for training (and thus may depend on
+a particular network's latency, bandwidth, etc.)
+
+
