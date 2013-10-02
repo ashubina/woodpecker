@@ -1,0 +1,42 @@
+vpnunder.pl
+
+This is the perl application that does the real work. It has to reside at a node that is between the two end points of the
+VPN, for example at the gateway of your network. 
+
+Usage: vpnunder.pl -dev [dev] -src [source_ip] -dst [dest_ip] -protos [protocols] 
+                   -min_len [min packet size] -max_len [max packet size] -c [packet count] 
+                   -outputfile [output file] -dumpfile [dump(pcap) file]
+
+Examples: 
+
+You suspect there might be a vpn on your network between 192.168.1.27 and 192.168.1.37 using udp:
+
+vpnunder.pl -dev eth1 -src 192.168.1.27 -dst 192.168.1.37 -max_len 1520 -min_len 1400 -p udp -c 17000 -outputfile suspect_vpn.txt
+
+You can also use multiple protocols(for example ipsec uses protocols 51 and 52):
+
+vpnunder.pl -dev eth1 -src 192.168.1.27 -dst 10.0.11.113 -max_len 1520 -min_len 1400 -p udp -c 17000 -outputfile suspect_vpn.txt
+
+requirements:
+  iptables
+  Perl modules:
+    Net::Pcap;
+    Getopt::Long;
+    Algorithm::KMeans;
+
+
+
+spectral-emmission.pl
+
+This is one of our visualization modules, it will take the output of vpnunder.pl and create a spectral emissions type of image in SVG format. 
+If you have known VPN data you can use this to quickly compare VPNs. 
+
+Example: spectral-emissions.pl suspect_vpn.txt > suspect_vpn.svg
+
+The above will read in data from suspect_vpn.txt and output an SVG image by the name suspect_vpn.svg. This image can be ready by any svg reader,
+this includes most major brand web browsers. If there are any datafiles in the "knowndata" subdirectory, then they will also be plotted. We have 
+included a few of these, but they may not match your network results. The hope is that there can be a centralized warehouse of capture results
+that can be compared. 
+
+  Perl modules:
+    SVG
